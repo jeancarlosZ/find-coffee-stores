@@ -10,15 +10,22 @@ export function getStaticProps(staticProps) {
   return {
     props: {
       coffeeStore: coffeeStoresData.find(coffeeStore => {
-        return coffeeStore.id.toString() === params.id; // dynamic id
+        return coffeeStore.id.toString() === params.id;
       }),
     },
   };
 }
 
 export function getStaticPaths() {
+  const paths = coffeeStoresData.map(coffeeStore => {
+    return {
+      params: {
+        id: coffeeStore.id.toString(),
+      },
+    };
+  });
   return {
-    paths: [{ params: { id: "0" } }, { params: { id: "1" } }],
+    paths,
     fallback: true,
   };
 }
