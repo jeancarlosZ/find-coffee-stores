@@ -15,7 +15,7 @@ export async function getStaticProps(staticProps) {
   return {
     props: {
       coffeeStore: coffeeStores.find(coffeeStore => {
-        return coffeeStore.fsq_id.toString() === params.id;
+        return coffeeStore.id.toString() === params.id;
       }),
     },
   };
@@ -26,7 +26,7 @@ export async function getStaticPaths() {
   const paths = coffeeStores.map(coffeeStore => {
     return {
       params: {
-        id: coffeeStore.fsq_id.toString(),
+        id: coffeeStore.id.toString(),
       },
     };
   });
@@ -43,8 +43,7 @@ const CoffeeStore = props => {
     return <div>Loading...</div>;
   }
 
-  const { name, imgUrl } = props.coffeeStore;
-  const { address, neighborhood } = props.coffeeStore.location;
+  const { name, address, neighborhood, imgUrl } = props.coffeeStore;
 
   const handleUpvoteButton = () => {
     console.log("handle upvote");
@@ -59,7 +58,7 @@ const CoffeeStore = props => {
         <div className={styles.col1}>
           <div className={styles.backToHomeLink}>
             <Link href="/">
-              <a>Back to home</a>
+              <a>← Back to home</a>
             </Link>
           </div>
           <div className={styles.nameWrapper}>
