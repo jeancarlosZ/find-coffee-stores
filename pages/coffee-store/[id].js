@@ -1,3 +1,4 @@
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
@@ -7,16 +8,19 @@ import cls from "classnames";
 
 import styles from "../../styles/coffee-store.module.css";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
+import { StoreContext } from "../_app";
+import { isEmpty } from "../../utils";
 
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
   const coffeeStores = await fetchCoffeeStores();
+  const findCoffeeStoreById = coffeeStores.find(coffeeStore => {
+    return coffeeStore.id.toString() === params.id;
+  });
 
   return {
     props: {
-      coffeeStore: coffeeStores.find(coffeeStore => {
-        return coffeeStore.id.toString() === params.id;
-      }),
+      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
     },
   };
 }
@@ -36,14 +40,32 @@ export async function getStaticPaths() {
   };
 }
 
-const CoffeeStore = props => {
+const CoffeeStore = initialProps => {
   const router = useRouter();
+
+  const id = router.query.id;
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
+
+  const {
+    state: { coffeeStores },
+  } = useContext(StoreContext);
+
+  useEffect(() => {
+    if (isEmpty(initialProps.coffeeStore)) {
+      if (coffeeStores.length > 0) {
+        const findCoffeeStoreById = coffeeStores.find(coffeeStore => {
+          return coffeeStore.id.toString() === id;
+        });
+        setCoffeeStore(findCoffeeStoreById);
+      }
+    }
+  }, [id, coffeeStores, initialProps.coffeeStore, initialProps]);
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
-  const { name, address, neighborhood, imgUrl } = props.coffeeStore;
+  const { name, address, neighborhood, imgUrl } = coffeeStore;
 
   const handleUpvoteButton = () => {
     console.log("handle upvote");
@@ -78,12 +100,22 @@ const CoffeeStore = props => {
 
         <div className={cls("glass", styles.col2)}>
           <div className={styles.iconWrapper}>
-            <Image src="/static/icons/places.svg" width="24" height="24" alt="" />
+            <Image
+              src="/static/icons/places.svg"
+              width="24"
+              height="24"
+              alt=""
+            />
             <p className={styles.text}>{address}</p>
           </div>
           {neighborhood && (
             <div className={styles.iconWrapper}>
-              <Image src="/static/icons/nearMe.svg" width="24" height="24" alt="" />
+              <Image
+                src="/static/icons/nearMe.svg"
+                width="24"
+                height="24"
+                alt=""
+              />
               <p className={styles.text}>{neighborhood}</p>
             </div>
           )}
