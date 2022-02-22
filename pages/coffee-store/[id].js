@@ -5,7 +5,6 @@ import Head from "next/head";
 import Image from "next/image";
 import useSWR from "swr";
 import cls from "classnames";
-
 import styles from "../../styles/coffee-store.module.css";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 import { StoreContext } from "../../store/store-context";
@@ -17,7 +16,6 @@ export async function getStaticProps(staticProps) {
   const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
     return coffeeStore.id.toString() === params.id;
   });
-
   return {
     props: {
       coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
@@ -42,17 +40,17 @@ export async function getStaticPaths() {
 
 const CoffeeStore = (initialProps) => {
   const router = useRouter();
-
   const id = router.query.id;
-  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
-
+  const [coffeeStore, setCoffeeStore] = useState(
+    initialProps.coffeeStore || {},
+  );
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
     try {
-      const { id, name, voting, imgUrl, neighborhood, address } = coffeeStore;
+      const { id, name, imgUrl, neighborhood, address } = coffeeStore;
       const response = await fetch("/api/createCoffeeStore", {
         method: "POST",
         headers: {
@@ -89,10 +87,13 @@ const CoffeeStore = (initialProps) => {
     }
   }, [id, coffeeStores, initialProps.coffeeStore, initialProps]);
 
-  const { name, address, neighborhood, imgUrl } = coffeeStore;
-
+  const {
+    name = "",
+    address = "",
+    neighborhood = "",
+    imgUrl = "",
+  } = coffeeStore;
   const [votingCount, setVotingCount] = useState(0);
-
   const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
 
   useEffect(() => {
@@ -135,6 +136,7 @@ const CoffeeStore = (initialProps) => {
     <div className={styles.layout}>
       <Head>
         <title>{name}</title>
+        <meta name="description" content={`${name} coffee store`}></meta>
       </Head>
       <div className={styles.container}>
         <div className={styles.col1}>
@@ -164,7 +166,7 @@ const CoffeeStore = (initialProps) => {
               src="/static/icons/places.svg"
               width="24"
               height="24"
-              alt=""
+              alt="places icon"
             />
             <p className={styles.text}>{address}</p>
           </div>
@@ -174,13 +176,18 @@ const CoffeeStore = (initialProps) => {
                 src="/static/icons/nearMe.svg"
                 width="24"
                 height="24"
-                alt=""
+                alt="near me icon"
               />
               <p className={styles.text}>{neighborhood}</p>
             </div>
           )}
           <div className={styles.iconWrapper}>
-            <Image src="/static/icons/star.svg" width="24" height="24" alt="" />
+            <Image
+              src="/static/icons/star.svg"
+              width="24"
+              height="24"
+              alt="star icon"
+            />
             <p className={styles.text}>{votingCount}</p>
           </div>
 
