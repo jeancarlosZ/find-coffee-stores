@@ -14,7 +14,7 @@ import { isEmpty } from "../../utils";
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
   const coffeeStores = await fetchCoffeeStores();
-  const findCoffeeStoreById = coffeeStores.find(coffeeStore => {
+  const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
     return coffeeStore.id.toString() === params.id;
   });
 
@@ -27,7 +27,7 @@ export async function getStaticProps(staticProps) {
 
 export async function getStaticPaths() {
   const coffeeStores = await fetchCoffeeStores();
-  const paths = coffeeStores.map(coffeeStore => {
+  const paths = coffeeStores.map((coffeeStore) => {
     return {
       params: {
         id: coffeeStore.id.toString(),
@@ -40,7 +40,7 @@ export async function getStaticPaths() {
   };
 }
 
-const CoffeeStore = initialProps => {
+const CoffeeStore = (initialProps) => {
   const router = useRouter();
 
   const id = router.query.id;
@@ -50,7 +50,7 @@ const CoffeeStore = initialProps => {
     state: { coffeeStores },
   } = useContext(StoreContext);
 
-  const handleCreateCoffeeStore = async coffeeStore => {
+  const handleCreateCoffeeStore = async (coffeeStore) => {
     try {
       const { id, name, voting, imgUrl, neighborhood, address } = coffeeStore;
       const response = await fetch("/api/createCoffeeStore", {
@@ -76,7 +76,7 @@ const CoffeeStore = initialProps => {
   useEffect(() => {
     if (isEmpty(initialProps.coffeeStore)) {
       if (coffeeStores.length > 0) {
-        const coffeeStoreFromContext = coffeeStores.find(coffeeStore => {
+        const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
           return coffeeStore.id.toString() === id;
         });
         if (coffeeStoreFromContext) {

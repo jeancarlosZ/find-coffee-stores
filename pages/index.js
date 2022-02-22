@@ -80,7 +80,7 @@ export default function Home(props) {
           <div className={styles.sectionWrapper}>
             <h2 className={styles.heading2}>Stores near me</h2>
             <div className={styles.cardLayout}>
-              {coffeeStores.map(coffeeStore => {
+              {coffeeStores.map((coffeeStore) => {
                 return (
                   <Card
                     key={coffeeStore.id}
@@ -101,7 +101,7 @@ export default function Home(props) {
           <div className={styles.sectionWrapper}>
             <h2 className={styles.heading2}>Toronto stores</h2>
             <div className={styles.cardLayout}>
-              {props.coffeeStores.map(coffeeStore => {
+              {props.coffeeStores.map((coffeeStore) => {
                 return (
                   <Card
                     key={coffeeStore.id}

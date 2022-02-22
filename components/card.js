@@ -4,7 +4,7 @@ import cls from "classnames";
 
 import styles from "./card.module.css";
 
-const Card = props => {
+const Card = (props) => {
   return (
     <Link href={props.href}>
       <a className={styles.cardLink}>
