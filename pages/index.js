@@ -1,11 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-
 import Banner from "../components/banner";
 import Card from "../components/card";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
-
 import useTrackLocation from "../hooks/use-track-location";
 import { useEffect, useState, useContext } from "react";
 import { ACTION_TYPES, StoreContext } from "../store/store-context";
@@ -42,7 +40,6 @@ export default function Home(props) {
           });
           setCoffeeStoresError("");
         } catch (error) {
-          console.log({ error });
           setCoffeeStoresError(error.message);
         }
       }
@@ -59,6 +56,10 @@ export default function Home(props) {
       <Head>
         <title>Coffee Finder</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="description"
+          content="allows you to find coffee stores"
+        ></meta>
       </Head>
       <main className={styles.main}>
         <Banner

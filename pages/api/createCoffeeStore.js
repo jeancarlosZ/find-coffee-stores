@@ -7,11 +7,9 @@ import {
 const createCoffeeStore = async (req, res) => {
   if (req.method === "POST") {
     const { id, name, neighborhood, address, imgUrl, voting } = req.body;
-
     try {
       if (id) {
         const records = await findRecordByFilter(id);
-
         if (records.length !== 0) {
           res.json(records);
         } else {
@@ -28,7 +26,6 @@ const createCoffeeStore = async (req, res) => {
                 },
               },
             ]);
-
             const records = getMinifiedRecords(createRecords);
             res.json(records);
           } else {

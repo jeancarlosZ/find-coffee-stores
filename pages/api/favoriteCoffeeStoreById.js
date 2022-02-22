@@ -10,7 +10,6 @@ const favoriteCoffeeStoreById = async (req, res) => {
       const { id } = req.body;
       if (id) {
         const records = await findRecordByFilter(id);
-
         if (records.length !== 0) {
           const record = records[0];
           const calculateVoting = parseInt(record.voting) + 1;
