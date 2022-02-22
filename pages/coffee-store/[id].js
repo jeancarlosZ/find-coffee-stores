@@ -50,7 +50,7 @@ const CoffeeStore = (initialProps) => {
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
     try {
-      const { id, name, imgUrl, neighborhood, address } = coffeeStore;
+      const { id, name, voting, imgUrl, neighborhood, address } = coffeeStore;
       const response = await fetch("/api/createCoffeeStore", {
         method: "POST",
         headers: {
@@ -59,7 +59,7 @@ const CoffeeStore = (initialProps) => {
         body: JSON.stringify({
           id,
           name,
-          voting: 0,
+          voting: voting || 0,
           imgUrl,
           neighborhood: neighborhood || "",
           address: address || "",
@@ -72,7 +72,7 @@ const CoffeeStore = (initialProps) => {
   };
 
   useEffect(() => {
-    if (isEmpty(initialProps.coffeeStore)) {
+    if (isEmpty(coffeeStore)) {
       if (coffeeStores.length > 0) {
         const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
           return coffeeStore.id.toString() === id;
@@ -83,9 +83,9 @@ const CoffeeStore = (initialProps) => {
         }
       }
     } else {
-      handleCreateCoffeeStore(initialProps.coffeeStore);
+      handleCreateCoffeeStore(coffeeStore);
     }
-  }, [id, coffeeStores, initialProps.coffeeStore, initialProps]);
+  }, [id, coffeeStores, coffeeStore, initialProps]);
 
   const {
     name = "",
